@@ -26,9 +26,7 @@
         max: 350
     };
     let len = (length.title < length.url ? length.url : length.title);
-    console.log(len, length.title < length.url);
     len = (len > length.max ? length.max : len);
-    console.log(len, length);
     function cutText(text) {
         if(text.length > _MAX_LENGTH_) {
             text = text.substr(0, parseInt(_MAX_LENGTH_) - 1) + ' ...';
