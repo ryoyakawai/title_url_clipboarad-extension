@@ -42,9 +42,20 @@
        font-size: 0.8em;
        margin-bottom: 5px;
      }
+     #key_icon:hover {
+       top: 4px; left: 8px;
+       width:24px;
+     }
+     #key_icon {
+       position: absolute;
+       top: 6px; left: 10px;
+       transition: 0.2s;
+       cursor: pointer;
+     }
     </style>
   </head>
   <body>
+    <img id ="key_icon" src="images/key.png" width="20px">
     <div id="clipped" class="card-1">Copied to Clipboard</div>
     <div id="title"></div>
     <div id="url"></div>

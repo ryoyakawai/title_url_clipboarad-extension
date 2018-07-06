@@ -32,9 +32,11 @@ import ChromeUtils from './chromeutils.js';
         info.short_url = await fetchData(request_url);
         info.short_url = JSON.parse(info.short_url);
         
-        let clipped_div = document.querySelector('#clipped');
-        let title_div = document.querySelector('#title');
-        let url_div = document.querySelector('#url');
+        const clipped_div = document.querySelector('#clipped');
+        const title_div = document.querySelector('#title');
+        const url_div = document.querySelector('#url');
+        const key_icon = document.querySelector('#key_icon');
+        key_icon.addEventListener('mousedown', updateSetting, false);
         let length = {
             title: Math.floor(6 * info.TITLE.length),
             url: Math.floor(6 * info.short_url.data.url.length),
@@ -63,6 +65,12 @@ import ChromeUtils from './chromeutils.js';
                                     
         let copy_string = `[${info.TITLE}]\n${info.short_url.data.url}\n`;
         copyToClipboard(copy_string);
+    }
+
+    function updateSetting(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        cutils.opentab('src/options.html');
     }
 
     async function fetchData(url) {
