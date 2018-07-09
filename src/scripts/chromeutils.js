@@ -47,6 +47,38 @@ export default class ChromeUtils {
         });
     }
 
+    async identity_launchWebAuthFlow(code_url, token_url) {
+        return new Promise( (resolve, reject) =>{
+            chrome.identity.launchWebAuthFlow(
+                { 'url': code_url, 'interactive': true },
+                function(redirect_url) {
+                    const a_params = (redirect_url.split('?').pop()).split('&');
+                    const params = convertArrayToObject(a_params);
+                    const header = {method: 'POST', mode: 'cors'};
+                    token_url = token_url.replace('%%CODE%%', params.code);
+                    fetch(token_url, header).then( res => {
+                        return  res.text();
+                    }).then( data => {
+                        const a_params = data.split('&');
+                        const params = convertArrayToObject(a_params);
+                        resolve(params);
+                    });
+                    function convertArrayToObject(a_params) {
+                        let params = {};
+                        for(let i in a_params) {
+                            let sp_val = a_params[i].split('=');
+                            params[sp_val[0]] = sp_val[1];
+                        }
+                        return params;
+                    }
+                });
+        });
+    }
+
+    identity_getRedirectURL(path) {
+        return chrome.identity.getRedirectURL(path);
+    }
+
     updateIcon(icon) {
         chrome.browserAction.setIcon({
             imageData : icon
@@ -68,5 +100,4 @@ export default class ChromeUtils {
     setWakeupAction(callback) {
         chrome.idle.onStateChanged = callback;
     }
-    
 }

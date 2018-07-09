@@ -21,7 +21,8 @@
   <head>
     <style>
      body {
-       padding: 10px;
+       padding: 20px;
+       font-size: 1.2em;
      }
      input[type="text"]:focus {
        outline: 0;
@@ -47,19 +48,26 @@
        margin-bottom: 4px;
        color: #333333;
      }
+     .li {
+       margin-bottom: 10px;
+     }
     </style>
   </head>
   <body>
-    <div class="caption_title">Saved Token: <span id="saved_token"></span></div>
-    <script type="module" src="scripts/options.js"></script>
-    <br><br>
-    <div class="caption_title">Access Token:</div>
-    <input id="access_token" type="text"/>
-    <button id="save_token_button">SAVE</button>
+      <div class="li"><input type="radio" name="shortenurl" id="notuseshorturl"> Does not use Bitly.com to make short its URL.</div>
+      <div class="li"><input type="radio" name="shortenurl" id="useshorturl"> Use Bitly!
 
-    <br/><br/>
+        <div class="caption_title">Saved Token: <span id="saved_token"></span></div>
+        <script type="module" src="scripts/options.js"></script>
+        <br><br>
+        <div class="caption_title">Access Token:</div>
+        <input id="access_token" type="text"/>
+        <button id="save_token_button">SAVE</button>
 
-    <button id="oauth_bitly">OAuth with Bitly</button>
+        <br/><br/>
+
+        <button id="oauth_bitly">OAuth with Bitly</button>
+      </div>
 
   </body>
 </html>

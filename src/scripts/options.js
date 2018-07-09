@@ -29,13 +29,17 @@ import ChromeUtils from './chromeutils.js';
         token_url: 'https://api-ssl.bitly.com/oauth/access_token?client_id=%%CLIENTID%%&client_secret=%%CLIENTSECRET%%&code=%%CODE%%&redirect_uri=%%REDIRECTURI%%',
         client_id: 'eab11821ba2c7cceb93660d8caca2ce6077ae9da',
         client_secret: '0cc2881337f96b27b4611f2cce1b9d831f6792d3',
-        redirect_uri: chrome.identity.getRedirectURL('src/callback.html')
+        redirect_uri: cutils.identity_getRedirectURL('src/callback.html')
     };
 
     let key = await getBitlyAccessToken();
     if(key !== null || key.length !== '') {
-        //access_token.value = key;
         saved_token.innerHTML = key;
+        let elem = document.querySelector('#useshorturl');
+        elem.setAttribute('checked', 'checked');
+    } else {
+        let elem = document.querySelector('#notuseshorturl');
+        elem.setAttribute('checked', 'checked');
     }
     
     saveButton.addEventListener('mousedown', event => {
@@ -66,35 +70,11 @@ import ChromeUtils from './chromeutils.js';
         const code_url = _BITLY_.oauth_url
               .replace('%%CLIENTID%%', _BITLY_.client_id)
               .replace('%%REDIRECTURI%%', _BITLY_.redirect_uri);
-        return new Promise( (resolve, reject) =>{
-            chrome.identity.launchWebAuthFlow(
-                { 'url': code_url, 'interactive': true },
-                function(redirect_url) {
-                    let params = {};
-                    const a_params = (redirect_url.split('?').pop()).split('&');
-                    for(let i in a_params) {
-                        let sp_val = a_params[i].split('=');
-                        params[sp_val[0]] = sp_val[1]; 
-                    }
-                    const token_url = _BITLY_.token_url
-                          .replace('%%CLIENTID%%', _BITLY_.client_id)
-                          .replace('%%CLIENTSECRET%%', _BITLY_.client_secret)
-                          .replace('%%CODE%%', params.code)
-                          .replace('%%REDIRECTURI%%', _BITLY_.redirect_uri);
-                    const header = {method: 'POST', mode: 'cors'};
-                    fetch(token_url, header).then( res => {
-                        return  res.text();
-                    }).then( data => {
-                        let params = {};
-                        const a_params = data.split('&');
-                        for(let i in a_params) {
-                            let sp_val = a_params[i].split('=');
-                            params[sp_val[0]] = sp_val[1]; 
-                        }
-                        resolve(params);
-                    });
-                });
-        });
+        let token_url = _BITLY_.token_url
+              .replace('%%CLIENTID%%', _BITLY_.client_id)
+              .replace('%%CLIENTSECRET%%', _BITLY_.client_secret)
+              .replace('%%REDIRECTURI%%', _BITLY_.redirect_uri);
+        return cutils.identity_launchWebAuthFlow(code_url, token_url);
     }
     
 }());
