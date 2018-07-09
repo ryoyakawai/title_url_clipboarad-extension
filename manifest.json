@@ -5,15 +5,18 @@
     "permissions": [
         "tabs",
         "idle",
-        "storage"
+        "storage",
+        "identity",
+        "*://*.chromiumapp.org/*",
+        "*://bitly.com/*"
     ],
     "background": {
-        "scripts": ["src/scripts/background.js"],
+        "page": "src/background.html",
         "persistent": false
     },
     "content_scripts": [
         {
-            "matches": [ "file:///*/options.html", "file:///*/popup.html" ],
+            "matches": [ "file:///*/options.html", "file:///*/popup.html", "file:///*/callback.html"],
             "js": ["src/scripts/inject.js"],
             "run_at": "document_start"
         }
