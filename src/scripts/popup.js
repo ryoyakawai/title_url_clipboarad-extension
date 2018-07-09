@@ -15,33 +15,44 @@
  **/
 
 import ChromeUtils from './chromeutils.js';
+import config from './config.js';
 
 (async function(){
     const cutils = new ChromeUtils();
-    const _MAX_LENGTH_ = 30;
-    const _STORAGE_NAME_ = 'bitly_access_token';
-    const _ACCESS_TOKEN_ = await cutils.storageGet(_STORAGE_NAME_);
-    const _BITLY_API_URL_ = 'https://api-ssl.bitly.com/v3/shorten?access_token=%%ACCESS_TOKEN%%&longUrl=%%LONGURL%%';
+    const _BITLY_ = config.bitly;
+    const _STORAGE_ = config.storagename;
+    const _TEXT_ = config.text;
     
     main();
     
     async function main() {
-        let info = await getTabTitleURL();
-        let request_url = _BITLY_API_URL_.replace('%%ACCESS_TOKEN%%', _ACCESS_TOKEN_);
-        request_url = request_url.replace('%%LONGURL%%', info.URL);
-        info.short_url = await fetchData(request_url);
-        info.short_url = JSON.parse(info.short_url);
-        
-        const clipped_div = document.querySelector('#clipped');
+        let use_shorturl = await cutils.storageGet(_STORAGE_._USE_SHORTURL_);
+        const access_token = await cutils.storageGet(_STORAGE_._TOKEN_);
         const title_div = document.querySelector('#title');
         const url_div = document.querySelector('#url');
         const key_icon = document.querySelector('#key_icon');
         key_icon.addEventListener('mousedown', updateSetting, false);
+
+        let info = await getTabTitleURL();
+        info.url_use = info.URL;
+        if(info.URL.match(/^http*/)!==null
+           && use_shorturl===true
+           && access_token != null) {
+            let request_url = _BITLY_.shorten_url.replace('%%ACCESS_TOKEN%%', access_token);
+            request_url = request_url.replace('%%LONGURL%%', info.URL);
+            info.url_use =
+                info.short_url = (JSON.parse(await fetchData(request_url))).data.url;
+        }
+        const clipped_div = document.querySelector('#clipped');
         let length = {
             title: Math.floor(6 * info.TITLE.length),
-            url: Math.floor(6 * info.short_url.data.url.length),
-            max: 350
+            url: Math.floor(6 * info.url_use.length),
+            max: _TEXT_.elem_max_length
         };
+        let copy_string = `[${info.TITLE}]\n${info.url_use}\n`;
+        copyToClipboard(copy_string);
+        title_div.innerHTML = '['+  cutText(info.TITLE, _TEXT_.max_length, ' ...') + ']';
+        url_div.innerHTML = cutText(info.url_use, _TEXT_.max_length, ' ...');
 
         function cutText(text, len, truncation) {
             if (truncation === undefined) { truncation = ''; }
@@ -59,12 +70,6 @@ import ChromeUtils from './chromeutils.js';
             }
             return text;
         }
-        
-        title_div.innerHTML = '['+  cutText(info.TITLE, _MAX_LENGTH_, ' ...') + ']';
-        url_div.innerHTML = cutText(info.short_url.data.url, _MAX_LENGTH_, ' ...');
-                                    
-        let copy_string = `[${info.TITLE}]\n${info.short_url.data.url}\n`;
-        copyToClipboard(copy_string);
     }
 
     function updateSetting(event) {
@@ -98,8 +103,6 @@ import ChromeUtils from './chromeutils.js';
             });
         });
     }
-
-
 
 }());
 

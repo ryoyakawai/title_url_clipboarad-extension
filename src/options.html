@@ -19,56 +19,37 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style>
-     body {
-       padding: 20px;
-       font-size: 1.2em;
-     }
-     input[type="text"]:focus {
-       outline: 0;
-     }
-     button:focus {
-       outline: 0;
-     }
-     #access_token {
-       width:400px;
-       font-size:1.3em;
-       padding: 4px;
-       border-radius:3px;
-       -webkit-appearance: none;
-       border: 1px solid #cdcdcd;
-     }
-     #save_token_button {
-       font-size: 1.3em;
-       padding: 4px;
-       color: #555555;
-     }
-     .caption_title {
-       font-size: 1.3em;
-       margin-bottom: 4px;
-       color: #333333;
-     }
-     .li {
-       margin-bottom: 10px;
-     }
-    </style>
+    <link rel="stylesheet" href="./css/options.css"/>
   </head>
   <body>
-      <div class="li"><input type="radio" name="shortenurl" id="notuseshorturl"> Does not use Bitly.com to make short its URL.</div>
-      <div class="li"><input type="radio" name="shortenurl" id="useshorturl"> Use Bitly!
+    <header>
+      <h1>Title URL Clipboard</h1>
+    </header>
 
-        <div class="caption_title">Saved Token: <span id="saved_token"></span></div>
-        <script type="module" src="scripts/options.js"></script>
-        <br><br>
-        <div class="caption_title">Access Token:</div>
-        <input id="access_token" type="text"/>
-        <button id="save_token_button">SAVE</button>
+    <article>
+      <h2>Settings</h2>
+      <section>
+        <label><input id="use-shorturl" class="option" type="checkbox">
+          <span>Shorten URL when it is available.</span>
+        </label>
+      </section>
+    </article>
 
-        <br/><br/>
+    <article>
+      <h2>Short URL Provider</h2>
+      <section>
+        <label>
+          <div class="with-image">
+            <span><img id="status-icon" src="./images/checkbox_off.png" width="20px"></span>
+            <span class="space-item-10"><img src="./images/bitly_title.png" width="60px"/></span>
+            <button id="login_bitly" class="space-item-20">Sign In</button>
+            <button id="logout_bitly" class="space-item-20">Sign Out</button>
+          </div>
+        </label>
+      </section>
+    </article>
 
-        <button id="oauth_bitly">OAuth with Bitly</button>
-      </div>
-
+    <script type="module" src="scripts/options.js"></script>
   </body>
 </html>
 

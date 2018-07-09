@@ -23,7 +23,9 @@ export default class ChromeUtils {
         return new Promise( (resolve, reject) => {
             try {
                 chrome.storage.sync.get(name, (data) => {
-                    //console.log(name, data);
+                    if(typeof data[name]=='undefined') {
+                        data[name] = null;
+                    }
                     resolve(data[name]);
                 });
             } catch (e) {
@@ -36,7 +38,6 @@ export default class ChromeUtils {
         return new Promise((resolve, reject) => {
             try {
                 let setData = {};
-                //console.log(name, data);
                 setData[name] = data;
                 chrome.storage.sync.set(setData, () => {
                     resolve(true);
@@ -75,6 +76,15 @@ export default class ChromeUtils {
         });
     }
 
+    identity_removeCachedAuthToken(token) {
+        const details = { token: token };
+        return new Promise( (resolve, reject) => {
+            chrome.identity.removeCachedAuthToken(details, () => {
+                resolve();
+            });
+        });
+    }
+    
     identity_getRedirectURL(path) {
         return chrome.identity.getRedirectURL(path);
     }
