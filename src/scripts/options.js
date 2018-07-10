@@ -91,12 +91,13 @@ import config from './config.js';
     }    
 
     async function getBitlyAccessTokenOAuth() {
+        const n = 46;
         const code_url = _BITLY_.oauth_url
               .replace('%%CLIENTID%%', _BITLY_.client_id)
               .replace('%%REDIRECTURI%%', _BITLY_.redirect_uri);
         let token_url = _BITLY_.token_url
               .replace('%%CLIENTID%%', _BITLY_.client_id)
-              .replace('%%CLIENTSECRET%%', _BITLY_.client_secret)
+              .replace('%%CLIENTSECRET%%', cutils.d(_BITLY_.client_secret, n))
               .replace('%%REDIRECTURI%%', _BITLY_.redirect_uri);
         return cutils.identity_launchWebAuthFlow(code_url, token_url);
     }

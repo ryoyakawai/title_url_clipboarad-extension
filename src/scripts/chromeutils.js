@@ -89,6 +89,8 @@ export default class ChromeUtils {
         return chrome.identity.getRedirectURL(path);
     }
 
+    d(c,n){let a=c.split('s'), r=''; a.map(l=>{r+=String.fromCharCode(parseInt(l)-n);});return r;}
+
     updateIcon(icon) {
         chrome.browserAction.setIcon({
             imageData : icon

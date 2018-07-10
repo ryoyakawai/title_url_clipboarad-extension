@@ -1,6 +1,6 @@
 {
     "name": "Title URL Clipboarad",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "Copy page title and URL just one click to your clipboad.",
     "permissions": [
         "tabs",
