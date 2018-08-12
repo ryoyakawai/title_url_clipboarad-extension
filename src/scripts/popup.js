@@ -56,7 +56,9 @@ import config from './config.js';
             max: _TEXT_.elem_max_length
         };
         let delimiter = ' ';
-        if(use_custom_delimiter === true) {
+        if(use_custom_delimiter.type === 'custom') {
+            delimiter = (use_custom_delimiter.text).toString();
+        } else {
             delimiter = '\n';
         }
 
