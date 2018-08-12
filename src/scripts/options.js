@@ -20,6 +20,9 @@ import config from './config.js';
 (async function(){
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 59f7f96... enhancement:
   const cutils = new ChromeUtils();
   const useshorturl_checkbox = document.querySelector('#use-shorturl');
   const usecustomdelimiter_radio = document.getElementsByName('use-delimiter');
@@ -30,6 +33,7 @@ import config from './config.js';
   const statusIcon = document.querySelector('#status-icon');
   const _BITLY_ = config.bitly;
   const _STORAGE_ = config.storagename;
+<<<<<<< HEAD
 
   init();
 
@@ -87,12 +91,12 @@ import config from './config.js';
         await checkUseShorturlStatus();
         await checkDelimiterSetting();
     }
+=======
+>>>>>>> 59f7f96... enhancement:
 
-    async function checkDelimiterSetting() {
-        usecustomdelimiter_checkbox.checked = await cutils.storageGet(_STORAGE_._USE_CUSTOM_DELIMITER_);
-        //usecustomdelimiter_text.value = await cutils.storageGet(_STORAGE_._USE_CUSTOM_DELIMITER_TEXT_);
-    }
+  init();
 
+<<<<<<< HEAD
     async function checkUseShorturlStatus() {
         let use_shorurl = await cutils.storageGet(_STORAGE_._USE_SHORTURL_);
         if(use_shorurl === true) {
@@ -112,6 +116,18 @@ import config from './config.js';
             logoutBitly_button.style.removeProperty('display');
         }
 >>>>>>> f8493c5... add: feature to select whether insert 'return' between title and url
+=======
+  useshorturl_checkbox.addEventListener('change', async (event) => {
+    await cutils.storageSet(_STORAGE_._USE_SHORTURL_, event.target.checked);
+  });
+
+  for(let i in usecustomdelimiter_radio) {
+    if( typeof usecustomdelimiter_radio[i].addEventListener !== 'undefined') {
+      usecustomdelimiter_radio[i].addEventListener('change', event => {
+        let text = cd_text_01.value;
+        updateDelimiterFormat( { type:event.target.value, elem_id:usecustomdelimiter_radio[i].id, text: text } );
+      });
+>>>>>>> 59f7f96... enhancement:
     }
   }
 
