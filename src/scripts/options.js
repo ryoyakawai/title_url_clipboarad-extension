@@ -19,10 +19,6 @@ import config from './config.js';
 
 (async function(){
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 59f7f96... enhancement:
   const cutils = new ChromeUtils();
   const useshorturl_checkbox = document.querySelector('#use-shorturl');
   const usecustomdelimiter_radio = document.getElementsByName('use-delimiter');
@@ -33,7 +29,6 @@ import config from './config.js';
   const statusIcon = document.querySelector('#status-icon');
   const _BITLY_ = config.bitly;
   const _STORAGE_ = config.storagename;
-<<<<<<< HEAD
 
   init();
 
@@ -47,78 +42,6 @@ import config from './config.js';
         let text = cd_text_01.value;
         updateDelimiterFormat( { type:event.target.value, elem_id:usecustomdelimiter_radio[i].id, text: text } );
       });
-=======
-    const cutils = new ChromeUtils();
-    const useshorturl_checkbox = document.querySelector('#use-shorturl');
-    const loginBitly_button = document.querySelector('#login_bitly');
-    const logoutBitly_button = document.querySelector('#logout_bitly');
-    const statusIcon = document.querySelector('#status-icon');
-    const _BITLY_ = config.bitly;
-    const _STORAGE_ = config.storagename;
-
-    init();
-
-    useshorturl_checkbox.addEventListener('change', async (event) => {
-        await cutils.storageSet(_STORAGE_._USE_SHORTURL_, event.target.checked);
-    });
-    
-    loginBitly_button.addEventListener('mousedown', async (event) => {
-        let keys = await getBitlyAccessTokenOAuth();
-        await saveBitlyAccessToken(keys.access_token);
-        ckechBitlyStatus();
-    }, false);
-    
-    logoutBitly_button.addEventListener('mousedown', async (event) => {
-        await removeAuthTokenStorage();
-        ckechBitlyStatus();
-    }, false);
-
-    async function init() {    
-        await ckechBitlyStatus();
-        await checkUseShorturlStatus();
-<<<<<<< HEAD
-        await checkDelimiterSetting();
-    }
-=======
->>>>>>> 59f7f96... enhancement:
-
-  init();
-=======
-    }
->>>>>>> parent of bcb4189... add: feature to select whether insert 'return' between title and url
-
-<<<<<<< HEAD
-    async function checkUseShorturlStatus() {
-        let use_shorurl = await cutils.storageGet(_STORAGE_._USE_SHORTURL_);
-        if(use_shorurl===true) {
-            useshorturl_checkbox.setAttribute('checked', 'checked');
-        }
-    }
-    
-    async function ckechBitlyStatus() {
-        loginBitly_button.style.display =
-            logoutBitly_button.style.display = 'none';
-        let key = await getBitlyAccessTokenStorage();
-        if(key === null) {
-            statusIcon.src = statusIcon.src.replace('_on', '_off');
-            loginBitly_button.style.removeProperty('display');
-        } else {
-            statusIcon.src = statusIcon.src.replace('_off', '_on');
-            logoutBitly_button.style.removeProperty('display');
-        }
->>>>>>> f8493c5... add: feature to select whether insert 'return' between title and url
-=======
-  useshorturl_checkbox.addEventListener('change', async (event) => {
-    await cutils.storageSet(_STORAGE_._USE_SHORTURL_, event.target.checked);
-  });
-
-  for(let i in usecustomdelimiter_radio) {
-    if( typeof usecustomdelimiter_radio[i].addEventListener !== 'undefined') {
-      usecustomdelimiter_radio[i].addEventListener('change', event => {
-        let text = cd_text_01.value;
-        updateDelimiterFormat( { type:event.target.value, elem_id:usecustomdelimiter_radio[i].id, text: text } );
-      });
->>>>>>> 59f7f96... enhancement:
     }
   }
 
