@@ -19,6 +19,7 @@ import config from './config.js';
 
 (async function(){
 
+<<<<<<< HEAD
   const cutils = new ChromeUtils();
   const useshorturl_checkbox = document.querySelector('#use-shorturl');
   const usecustomdelimiter_radio = document.getElementsByName('use-delimiter');
@@ -42,6 +43,75 @@ import config from './config.js';
         let text = cd_text_01.value;
         updateDelimiterFormat( { type:event.target.value, elem_id:usecustomdelimiter_radio[i].id, text: text } );
       });
+=======
+    const cutils = new ChromeUtils();
+    const useshorturl_checkbox = document.querySelector('#use-shorturl');
+    const usecustomdelimiter_checkbox = document.querySelector('#use-custom-delimiter');
+    //const usecustomdelimiter_text = document.querySelector('#use-custom-delimiter-text');
+    const loginBitly_button = document.querySelector('#login_bitly');
+    const logoutBitly_button = document.querySelector('#logout_bitly');
+    const statusIcon = document.querySelector('#status-icon');
+    const _BITLY_ = config.bitly;
+    const _STORAGE_ = config.storagename;
+
+    init();
+
+    useshorturl_checkbox.addEventListener('change', async (event) => {
+        await cutils.storageSet(_STORAGE_._USE_SHORTURL_, event.target.checked);
+    });
+
+    usecustomdelimiter_checkbox.addEventListener('change', await udpateDelimiterFormat, false);
+    //usecustomdelimiter_text.addEventListener('input', await udpateDelimiterFormat, false);
+    async function udpateDelimiterFormat(event) {
+        await cutils.storageSet(_STORAGE_._USE_CUSTOM_DELIMITER_, usecustomdelimiter_checkbox.checked);
+        /*
+        if(usecustomdelimiter_checkbox.checked == true) {
+            await cutils.storageSet(_STORAGE_._USE_CUSTOM_DELIMITER_TEXT_, usecustomdelimiter_text.value);
+        }
+        */
+    }
+    
+    loginBitly_button.addEventListener('mousedown', async (event) => {
+        let keys = await getBitlyAccessTokenOAuth();
+        await saveBitlyAccessToken(keys.access_token);
+        ckechBitlyStatus();
+    }, false);
+    
+    logoutBitly_button.addEventListener('mousedown', async (event) => {
+        await removeAuthTokenStorage();
+        ckechBitlyStatus();
+    }, false);
+
+    async function init() {
+        await ckechBitlyStatus();
+        await checkUseShorturlStatus();
+        await checkDelimiterSetting();
+    }
+
+    async function checkDelimiterSetting() {
+        usecustomdelimiter_checkbox.checked = await cutils.storageGet(_STORAGE_._USE_CUSTOM_DELIMITER_);
+        //usecustomdelimiter_text.value = await cutils.storageGet(_STORAGE_._USE_CUSTOM_DELIMITER_TEXT_);
+    }
+
+    async function checkUseShorturlStatus() {
+        let use_shorurl = await cutils.storageGet(_STORAGE_._USE_SHORTURL_);
+        if(use_shorurl === true) {
+            useshorturl_checkbox.setAttribute('checked', 'checked');
+        }
+    }
+    
+    async function ckechBitlyStatus() {
+        loginBitly_button.style.display =
+            logoutBitly_button.style.display = 'none';
+        let key = await getBitlyAccessTokenStorage();
+        if(key === null) {
+            statusIcon.src = statusIcon.src.replace('_on', '_off');
+            loginBitly_button.style.removeProperty('display');
+        } else {
+            statusIcon.src = statusIcon.src.replace('_off', '_on');
+            logoutBitly_button.style.removeProperty('display');
+        }
+>>>>>>> f8493c5... add: feature to select whether insert 'return' between title and url
     }
   }
 
