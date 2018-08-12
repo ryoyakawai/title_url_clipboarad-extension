@@ -14,102 +14,101 @@
  * limitations under the License.
  **/
 
-
 export default class ChromeUtils {
-    constructor() {
-    }
+  constructor() {
+  }
 
-    async storageGet(name) {
-        return new Promise( (resolve, reject) => {
-            try {
-                chrome.storage.sync.get(name, (data) => {
-                    if(typeof data[name]=='undefined') {
-                        data[name] = null;
-                    }
-                    resolve(data[name]);
-                });
-            } catch (e) {
-                reject(new Error(e));
+  async storageGet(name) {
+    return new Promise( (resolve, reject) => {
+      try {
+        chrome.storage.sync.get(name, (data) => {
+          if(typeof data[name]=='undefined') {
+            data[name] = null;
+          }
+          resolve(data[name]);
+        });
+      } catch (e) {
+        reject(new Error(e));
+      }
+    });
+  }
+
+  async storageSet(name, data) {
+    return new Promise((resolve, reject) => {
+      try {
+        let setData = {};
+        setData[name] = data;
+        chrome.storage.sync.set(setData, () => {
+          resolve(true);
+        });
+      } catch(e) {
+        reject(new Error(e));
+      }
+    });
+  }
+
+  async identity_launchWebAuthFlow(code_url, token_url) {
+    return new Promise( (resolve, reject) =>{
+      chrome.identity.launchWebAuthFlow(
+        { 'url': code_url, 'interactive': true },
+        function(redirect_url) {
+          const a_params = (redirect_url.split('?').pop()).split('&');
+          const params = convertArrayToObject(a_params);
+          const header = {method: 'POST', mode: 'cors'};
+          token_url = token_url.replace('%%CODE%%', params.code);
+          fetch(token_url, header).then( res => {
+            return  res.text();
+          }).then( data => {
+            const a_params = data.split('&');
+            const params = convertArrayToObject(a_params);
+            resolve(params);
+          });
+          function convertArrayToObject(a_params) {
+            let params = {};
+            for(let i in a_params) {
+              let sp_val = a_params[i].split('=');
+              params[sp_val[0]] = sp_val[1];
             }
+            return params;
+          }
         });
-    }
+    });
+  }
 
-    async storageSet(name, data) {
-        return new Promise((resolve, reject) => {
-            try {
-                let setData = {};
-                setData[name] = data;
-                chrome.storage.sync.set(setData, () => {
-                    resolve(true);
-                });
-            } catch(e) {
-                reject(new Error(e));
-            }
-        });
-    }
+  identity_removeCachedAuthToken(token) {
+    const details = { token: token };
+    return new Promise( (resolve, reject) => {
+      chrome.identity.removeCachedAuthToken(details, () => {
+        resolve();
+      });
+    });
+  }
 
-    async identity_launchWebAuthFlow(code_url, token_url) {
-        return new Promise( (resolve, reject) =>{
-            chrome.identity.launchWebAuthFlow(
-                { 'url': code_url, 'interactive': true },
-                function(redirect_url) {
-                    const a_params = (redirect_url.split('?').pop()).split('&');
-                    const params = convertArrayToObject(a_params);
-                    const header = {method: 'POST', mode: 'cors'};
-                    token_url = token_url.replace('%%CODE%%', params.code);
-                    fetch(token_url, header).then( res => {
-                        return  res.text();
-                    }).then( data => {
-                        const a_params = data.split('&');
-                        const params = convertArrayToObject(a_params);
-                        resolve(params);
-                    });
-                    function convertArrayToObject(a_params) {
-                        let params = {};
-                        for(let i in a_params) {
-                            let sp_val = a_params[i].split('=');
-                            params[sp_val[0]] = sp_val[1];
-                        }
-                        return params;
-                    }
-                });
-        });
-    }
+  identity_getRedirectURL(path) {
+    return chrome.identity.getRedirectURL(path);
+  }
 
-    identity_removeCachedAuthToken(token) {
-        const details = { token: token };
-        return new Promise( (resolve, reject) => {
-            chrome.identity.removeCachedAuthToken(details, () => {
-                resolve();
-            });
-        });
-    }
-    
-    identity_getRedirectURL(path) {
-        return chrome.identity.getRedirectURL(path);
-    }
+  d(c,n){let a=c.split('s'), r=''; a.map(l=>{r+=String.fromCharCode(parseInt(l)-n);});return r;}
 
-    d(c,n){let a=c.split('s'), r=''; a.map(l=>{r+=String.fromCharCode(parseInt(l)-n);});return r;}
+  updateIcon(icon) {
+    chrome.browserAction.setIcon({
+      imageData : icon
+    });
+  }
 
-    updateIcon(icon) {
-        chrome.browserAction.setIcon({
-            imageData : icon
-        });
-    }
+  updateBadgeText(text) {
+    chrome.browserAction.setBadgeText({text: text});
+  }
 
-    updateBadgeText(text) {
-        chrome.browserAction.setBadgeText({text: text});
-    }
+  updateTitle(text) {
+    chrome.browserAction.setTitle({title: text});
+  }
 
-    updateTitle(text) {
-        chrome.browserAction.setTitle({title: text});
-    }
+  opentab(path) {
+    chrome.tabs.create({ url: path });
+  }
 
-    opentab(path) {
-        chrome.tabs.create({ url: path });
-    }
-
-    setWakeupAction(callback) {
-        chrome.idle.onStateChanged = callback;
-    }
+  setWakeupAction(callback) {
+    chrome.idle.onStateChanged = callback;
+  }
 }

@@ -63,3 +63,12 @@ label {
 .filter-gray-scale {
   filter: grayscale(100%);
 }
+
+div.option-delimiter {
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+label.div-in {
+  margin-top: 10px;
+}
