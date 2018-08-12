@@ -50,8 +50,6 @@ import config from './config.js';
 =======
     const cutils = new ChromeUtils();
     const useshorturl_checkbox = document.querySelector('#use-shorturl');
-    const usecustomdelimiter_checkbox = document.querySelector('#use-custom-delimiter');
-    //const usecustomdelimiter_text = document.querySelector('#use-custom-delimiter-text');
     const loginBitly_button = document.querySelector('#login_bitly');
     const logoutBitly_button = document.querySelector('#logout_bitly');
     const statusIcon = document.querySelector('#status-icon');
@@ -63,17 +61,6 @@ import config from './config.js';
     useshorturl_checkbox.addEventListener('change', async (event) => {
         await cutils.storageSet(_STORAGE_._USE_SHORTURL_, event.target.checked);
     });
-
-    usecustomdelimiter_checkbox.addEventListener('change', await udpateDelimiterFormat, false);
-    //usecustomdelimiter_text.addEventListener('input', await udpateDelimiterFormat, false);
-    async function udpateDelimiterFormat(event) {
-        await cutils.storageSet(_STORAGE_._USE_CUSTOM_DELIMITER_, usecustomdelimiter_checkbox.checked);
-        /*
-        if(usecustomdelimiter_checkbox.checked == true) {
-            await cutils.storageSet(_STORAGE_._USE_CUSTOM_DELIMITER_TEXT_, usecustomdelimiter_text.value);
-        }
-        */
-    }
     
     loginBitly_button.addEventListener('mousedown', async (event) => {
         let keys = await getBitlyAccessTokenOAuth();
@@ -86,20 +73,24 @@ import config from './config.js';
         ckechBitlyStatus();
     }, false);
 
-    async function init() {
+    async function init() {    
         await ckechBitlyStatus();
         await checkUseShorturlStatus();
+<<<<<<< HEAD
         await checkDelimiterSetting();
     }
 =======
 >>>>>>> 59f7f96... enhancement:
 
   init();
+=======
+    }
+>>>>>>> parent of bcb4189... add: feature to select whether insert 'return' between title and url
 
 <<<<<<< HEAD
     async function checkUseShorturlStatus() {
         let use_shorurl = await cutils.storageGet(_STORAGE_._USE_SHORTURL_);
-        if(use_shorurl === true) {
+        if(use_shorurl===true) {
             useshorturl_checkbox.setAttribute('checked', 'checked');
         }
     }

@@ -36,13 +36,12 @@ import config from './config.js';
     const _BITLY_ = config.bitly;
     const _STORAGE_ = config.storagename;
     const _TEXT_ = config.text;
-    const _USE_CUSTOM_DELIMITER = config._USE_CUSTOM_DELIMITER_;
-    //const _USE_CUSTOM_DELIMITER_TEXT_ = config._USE_CUSTOM_DELIMITER_TEXT_;
     
     main();
     
     async function main() {
         let use_shorturl = await cutils.storageGet(_STORAGE_._USE_SHORTURL_);
+<<<<<<< HEAD
         let use_custom_delimiter = await cutils.storageGet(_STORAGE_._USE_CUSTOM_DELIMITER_);
         //let use_custom_delimiter_text = await cutils.storageGet(_STORAGE_._USE_CUSTOM_DELIMITER_TEXT_);
 =======
@@ -63,6 +62,31 @@ import config from './config.js';
 <<<<<<< HEAD
         let copy_string = ([`[${info.TITLE}]`, info.url_use]).join(delimiter);
         copy_string =  copy_string + '\n';
+=======
+        const access_token = await cutils.storageGet(_STORAGE_._TOKEN_);
+        const title_div = document.querySelector('#title');
+        const url_div = document.querySelector('#url');
+        const key_icon = document.querySelector('#key_icon');
+        key_icon.addEventListener('mousedown', updateSetting, false);
+
+        let info = await getTabTitleURL();
+        info.url_use = info.URL;
+        if(info.URL.match(/^http*/)!==null
+           && use_shorturl===true
+           && access_token != null) {
+            let request_url = _BITLY_.shorten_url.replace('%%ACCESS_TOKEN%%', access_token);
+            request_url = request_url.replace('%%LONGURL%%', info.URL);
+            info.url_use =
+                info.short_url = (JSON.parse(await fetchData(request_url))).data.url;
+        }
+        const clipped_div = document.querySelector('#clipped');
+        let length = {
+            title: Math.floor(6 * info.TITLE.length),
+            url: Math.floor(6 * info.url_use.length),
+            max: _TEXT_.elem_max_length
+        };
+        let copy_string = `[${info.TITLE}]\n${info.url_use}\n`;
+>>>>>>> parent of bcb4189... add: feature to select whether insert 'return' between title and url
         copyToClipboard(copy_string);
         title_div.innerHTML = '['+  cutText(info.TITLE, _TEXT_.max_length, ' ...') + ']';
         url_div.innerHTML = cutText(info.url_use, _TEXT_.max_length, ' ...');
