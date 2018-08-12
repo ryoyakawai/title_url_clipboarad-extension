@@ -6,7 +6,8 @@ const cutils = new ChromeUtils();
 const config = {
     storagename: {
         _TOKEN_: 'bitly_access_token',
-        _USE_SHORTURL_: 'use_short_url'        
+        _USE_SHORTURL_: 'use_short_url',
+        _USE_CUSTOM_DELIMITER_: 'use_custom_delimiter'
     },
     bitly: {
         shorten_url : 'https://api-ssl.bitly.com/v3/shorten?access_token=%%ACCESS_TOKEN%%&longUrl=%%LONGURL%%',
