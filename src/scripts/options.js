@@ -81,7 +81,10 @@ import config from './config.js';
 
   async function checkDelimiterSetting() {
     let d_s = await cutils.storageGet(_STORAGE_._USE_CUSTOM_DELIMITER_);
-    if(d_s === null) d_s = {elem_id: "use-custom-delimiter-00", text: " - ", type: "return"};
+    if(d_s === null) {
+      d_s = {elem_id: "use-custom-delimiter-00", text: " - ", type: "return"};
+      updateDelimiterFormat(d_s);
+    }
     document.querySelector('#' + d_s.elem_id).checked = true;
     cd_text_01.value = d_s.text;
   }

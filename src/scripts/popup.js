@@ -22,16 +22,12 @@ import config from './config.js';
   const _BITLY_ = config.bitly;
   const _STORAGE_ = config.storagename;
   const _TEXT_ = config.text;
-  const _USE_CUSTOM_DELIMITER = config._USE_CUSTOM_DELIMITER_;
-  //const _USE_CUSTOM_DELIMITER_TEXT_ = config._USE_CUSTOM_DELIMITER_TEXT_;
 
   main();
 
   async function main() {
     let use_shorturl = await cutils.storageGet(_STORAGE_._USE_SHORTURL_);
     let use_custom_delimiter = await cutils.storageGet(_STORAGE_._USE_CUSTOM_DELIMITER_);
-    //let use_custom_delimiter_text = await cutils.storageGet(_STORAGE_._USE_CUSTOM_DELIMITER_TEXT_);
-
     const access_token = await cutils.storageGet(_STORAGE_._TOKEN_);
     const title_div = document.querySelector('#title');
     const url_div = document.querySelector('#url');
@@ -56,6 +52,7 @@ import config from './config.js';
       max: _TEXT_.elem_max_length
     };
     let delimiter = ' ';
+    console.log(use_custom_delimiter);
     if(use_custom_delimiter.type === 'custom') {
       delimiter = (use_custom_delimiter.text).toString();
     } else {
