@@ -23,47 +23,51 @@
   </head>
   <body>
     <header>
-      <h1>Title URL Clipboard</h1>
+      <h1 class="title">Title URL Clipboard</h1>
     </header>
 
-    <article>
-      <h2>Settings</h2>
-      <section>
-        <label><input id="use-shorturl" class="option" type="checkbox">
-          <span>Shorten URL when it is available.</span>
-        </label>
-        <label class="div-in">
-          <span>Choose Delimiter in between title and URL.</span><br>
-          <div class="option-delimiter">
+    <div class="container">
+      <article>
+        <h2>Settings</h2>
+        <section>
+          <label><input id="use-shorturl" class="option" type="checkbox">
+            <span>Shorten URL when it is available.</span>
+          </label>
+          <label class="div-in">
+            <span>Choose Delimiter in between title and URL.</span><br>
+            <div class="option-delimiter">
 
-            <label for="use-custom-delimiter-00">
-              <input id="use-custom-delimiter-00" name="use-delimiter" class="option" type="radio" value="return"/>
-              Return
-            </label>
+              <label for="use-custom-delimiter-00">
+                <input id="use-custom-delimiter-00" name="use-delimiter" class="option" type="radio" value="return"/>
+                Return
+              </label>
 
-            <label for="use-custom-delimiter-01">
-              <input id="use-custom-delimiter-01" name="use-delimiter" class="option" type="radio" value="custom"/>
-              <span>Custom : <input id="delimiter-text-01" type="text" value=" - ">
-            </label>
-          </div>
+              <label for="use-custom-delimiter-01">
+                <input id="use-custom-delimiter-01" name="use-delimiter" class="option" type="radio" value="custom"/>
+                <span>Custom : <input id="delimiter-text-01" type="text" value=" - "/></span>
+              </label>
+            </div>
 
-        </label>
-      </section>
-    </article>
+          </label>
+        </section>
+      </article>
+    </div>
 
-    <article>
-      <h2>Short URL Provider</h2>
-      <section>
-        <label>
-          <div class="with-image">
-            <span><img id="status-icon" src="./images/checkbox_off.png" width="20px"></span>
-            <span class="space-item-10"><img src="./images/bitly_title.png" width="60px"/></span>
-            <button id="login_bitly" class="space-item-20">Sign In</button>
-            <button id="logout_bitly" class="space-item-20">Sign Out</button>
-          </div>
-        </label>
-      </section>
-    </article>
+    <div class="container">
+      <article>
+        <h2>Short URL Provider</h2>
+        <section>
+          <label>
+            <div class="with-image">
+              <span><img id="status-icon" src="./images/checkbox_off.png" width="20px"></span>
+              <span class="space-item-10"><img src="./images/bitly_title.png" width="60px"/></span>
+              <button id="login_bitly" class="space-item-20">Sign In</button>
+              <button id="logout_bitly" class="space-item-20">Sign Out</button>
+            </div>
+          </label>
+        </section>
+      </article>
+    </div>
 
     <script type="module" src="scripts/options.js"></script>
   </body>

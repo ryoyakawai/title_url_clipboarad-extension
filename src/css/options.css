@@ -6,8 +6,16 @@
 
 html {
   margin: 12px 0 0 55px;
-  min-width: 576px;
-  max-width: 738px;
+}
+
+div.container {
+  display: flex;
+  justify-content: center;
+  padding-left: 20px;
+}
+
+article {
+  width: 600px;
 }
 
 article + article {
@@ -21,12 +29,21 @@ code {
   padding: 2px 4px;
 }
 
+header {
+  display: flex;
+  justify-content: center;
+}
+
 h1 {
   font-size: 14pt;
-  font-weight: normal;
+  font-weight: bold;
   margin: 12px 0;
   padding-bottom: 12px;
   border-bottom: 1px solid #efefef;
+}
+
+h1.title {
+  width: 600px;
 }
 
 h2 {
