@@ -22,18 +22,46 @@ import config from './config.js';
   const _BITLY_ = config.bitly;
   const _STORAGE_ = config.storagename;
   const _TEXT_ = config.text;
+  var _STATE_ = false;
 
   main();
 
   async function main() {
+    const key_icon = document.querySelector('#key_icon');
+    const reload_icon = document.querySelector('#reload_icon');
+
+    key_icon.addEventListener('mousedown', updateSetting, false);
+
+    reload_icon.addEventListener('mousedown', async function(event) {
+      _STATE_ = !_STATE_;
+      updateUrl(_STATE_);
+    }, false);
+
     let use_shorturl = await cutils.storageGet(_STORAGE_._USE_SHORTURL_);
+    _STATE_ = use_shorturl;
+    updateUrl(use_shorturl);
+
+    const access_token = await cutils.storageGet(_STORAGE_._TOKEN_);
+    var set_access_token = false;
+    if(access_token != null) {
+      set_access_token = true;
+    }
+    toggleReloadIcon(set_access_token);
+  }
+
+  function toggleReloadIcon(mode) {
+    let reload_icon = document.querySelector('#reload_icon');
+    reload_icon.classList.remove('display_none');
+    if ( mode === false ) {
+      reload_icon.classList.add('display_none');
+    }
+  }
+
+  async function updateUrl(use_shorturl) {
     let use_custom_delimiter = await cutils.storageGet(_STORAGE_._USE_CUSTOM_DELIMITER_);
     const access_token = await cutils.storageGet(_STORAGE_._TOKEN_);
     const title_div = document.querySelector('#title');
     const url_div = document.querySelector('#url');
-    const key_icon = document.querySelector('#key_icon');
-
-    key_icon.addEventListener('mousedown', updateSetting, false);
 
     let info = await getTabTitleURL();
     info.url_use = info.URL;
