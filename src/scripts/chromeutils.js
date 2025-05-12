@@ -48,10 +48,11 @@ export default class ChromeUtils {
   }
 
   async identity_launchWebAuthFlow(code_url, token_url) {
+    const redirect_url = chrome.identity.getRedirectURL()
     return new Promise( (resolve, reject) =>{
       chrome.identity.launchWebAuthFlow(
         { 'url': code_url, 'interactive': true },
-        function(redirect_url) {
+        function(/*redirect_url*/) {
           const a_params = (redirect_url.split('?').pop()).split('&');
           const params = convertArrayToObject(a_params);
           const header = {method: 'POST', mode: 'cors'};

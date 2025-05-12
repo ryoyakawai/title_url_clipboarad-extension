@@ -24,6 +24,7 @@ import config from './config.js';
   const _TEXT_ = config.text;
   var _STATE_ = false;
 
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
   main();
 
   async function main() {
@@ -63,7 +64,7 @@ import config from './config.js';
     const title_div = document.querySelector('#title');
     const url_div = document.querySelector('#url');
 
-    let info = await getTabTitleURL();
+    let info = {URL: tab.url, TITLE: tab.title}
     info.url_use = info.URL;
     if(info.URL.match(/^http*/)!==null
        && use_shorturl===true
@@ -80,8 +81,7 @@ import config from './config.js';
       max: _TEXT_.elem_max_length
     };
     let delimiter = ' ';
-    console.log(use_custom_delimiter);
-    if(use_custom_delimiter.type === 'custom') {
+    if(use_custom_delimiter !== null && use_custom_delimiter.type === 'custom') {
       delimiter = (use_custom_delimiter.text).toString();
     } else {
       delimiter = '\n';
@@ -133,14 +133,6 @@ import config from './config.js';
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
-  };
-
-  async function getTabTitleURL() {
-    return new Promise( (resolve, reject) => {
-      chrome.tabs.getSelected(null, tab => {
-        resolve({URL: tab.url, TITLE: tab.title});
-      });
-    });
   }
 
 }());
