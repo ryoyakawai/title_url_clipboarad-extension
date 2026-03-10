@@ -20,21 +20,11 @@ import config from './config.js';
 (async function(){
 
   const cutils = new ChromeUtils();
-  const useshorturl_checkbox = document.querySelector('#use-shorturl');
   const usecustomdelimiter_radio = document.getElementsByName('use-delimiter');
   const cd_text_01 = document.querySelector('#delimiter-text-01');
-  //const usecustomdelimiter_text = document.querySelector('#use-custom-delimiter-text');
-  const loginBitly_button = document.querySelector('#login_bitly');
-  const logoutBitly_button = document.querySelector('#logout_bitly');
-  const statusIcon = document.querySelector('#status-icon');
-  const _BITLY_ = config.bitly;
   const _STORAGE_ = config.storagename;
 
   init();
-
-  useshorturl_checkbox.addEventListener('change', async (event) => {
-    await cutils.storageSet(_STORAGE_._USE_SHORTURL_, event.target.checked);
-  });
 
   for(let i in usecustomdelimiter_radio) {
     if( typeof usecustomdelimiter_radio[i].addEventListener !== 'undefined') {
@@ -58,24 +48,7 @@ import config from './config.js';
     await cutils.storageSet(_STORAGE_._USE_CUSTOM_DELIMITER_, param);
   }
 
-  loginBitly_button.addEventListener('mousedown', async (event) => {
-    let keys = await getBitlyAccessTokenOAuth();
-    if(typeof keys.access_token == 'undefined') {
-      console.error('[Error to Obtain OAuth Token]', keys);
-    } else {
-      await saveBitlyAccessToken(keys.access_token);
-      ckechBitlyStatus();
-    }
-  }, false);
-
-  logoutBitly_button.addEventListener('mousedown', async (event) => {
-    await removeAuthTokenStorage();
-    ckechBitlyStatus();
-  }, false);
-
   async function init() {
-    await ckechBitlyStatus();
-    await checkUseShorturlStatus();
     await checkDelimiterSetting();
   }
 
@@ -89,58 +62,4 @@ import config from './config.js';
     cd_text_01.value = d_s.text;
   }
 
-  async function checkUseShorturlStatus() {
-    let use_shorurl = await cutils.storageGet(_STORAGE_._USE_SHORTURL_);
-    if(use_shorurl === true) {
-      useshorturl_checkbox.setAttribute('checked', 'checked');
-    }
-  }
-
-  async function ckechBitlyStatus() {
-    loginBitly_button.style.display =
-      logoutBitly_button.style.display = 'none';
-    let key = await getBitlyAccessTokenStorage();
-    if(key === null) {
-      statusIcon.src = statusIcon.src.replace('_on', '_off');
-      loginBitly_button.style.removeProperty('display');
-    } else {
-      statusIcon.src = statusIcon.src.replace('_off', '_on');
-      logoutBitly_button.style.removeProperty('display');
-    }
-  }
-
-  async function removeAuthTokenStorage() {
-    let key = await getBitlyAccessTokenStorage();
-    if(key !== null) {
-      await cutils.identity_removeCachedAuthToken(key);
-      removeBitlyAccessToken();
-    }
-  }
-
-  async function getBitlyAccessTokenStorage() {
-    let key = await cutils.storageGet(_STORAGE_._TOKEN_);
-    return key;
-  }
-
-  async function saveBitlyAccessToken(access_token) {
-    await cutils.storageSet(_STORAGE_._TOKEN_, access_token);
-  }
-
-  async function removeBitlyAccessToken() {
-    await cutils.storageSet(_STORAGE_._TOKEN_, null);
-  }
-
-  async function getBitlyAccessTokenOAuth() {
-    const n = 46;
-    const code_url = _BITLY_.oauth_url
-          .replace('%%CLIENTID%%', _BITLY_.client_id)
-          .replace('%%REDIRECTURI%%', _BITLY_.redirect_uri);
-    let token_url = _BITLY_.token_url
-        .replace('%%CLIENTID%%', _BITLY_.client_id)
-        .replace('%%CLIENTSECRET%%', cutils.d(_BITLY_.client_secret, n))
-        .replace('%%REDIRECTURI%%', _BITLY_.redirect_uri);
-    return cutils.identity_launchWebAuthFlow(code_url, token_url);
-  }
-
 }());
-
