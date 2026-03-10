@@ -26,8 +26,8 @@ import config from './config.js';
   main();
 
   async function main() {
-    const key_icon = document.querySelector('#key_icon');
-    key_icon.addEventListener('mousedown', updateSetting, false);
+    const settings_icon = document.querySelector('#settings_icon');
+    settings_icon.addEventListener('mousedown', updateSetting, false);
 
     updateUrl();
   }
