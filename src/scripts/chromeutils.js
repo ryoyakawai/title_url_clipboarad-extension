@@ -19,50 +19,39 @@ export default class ChromeUtils {
   }
 
   async storageGet(name) {
-    return new Promise( (resolve, reject) => {
-      try {
-        chrome.storage.sync.get(name, (data) => {
-          if(typeof data[name]=='undefined') {
-            data[name] = null;
-          }
-          resolve(data[name]);
-        });
-      } catch (e) {
-        reject(new Error(e));
-      }
-    });
+    const data = await chrome.storage.sync.get(name);
+    return data[name] === undefined ? null : data[name];
   }
 
   async storageSet(name, data) {
-    return new Promise((resolve, reject) => {
-      try {
-        let setData = {};
-        setData[name] = data;
-        chrome.storage.sync.set(setData, () => {
-          resolve(true);
-        });
-      } catch(e) {
-        reject(new Error(e));
-      }
-    });
+    let setData = {};
+    setData[name] = data;
+    await chrome.storage.sync.set(setData);
+    return true;
   }
 
   async identity_launchWebAuthFlow(code_url, token_url) {
+    const redirect_url = chrome.identity.getRedirectURL()
     return new Promise( (resolve, reject) =>{
       chrome.identity.launchWebAuthFlow(
         { 'url': code_url, 'interactive': true },
-        function(redirect_url) {
-          const a_params = (redirect_url.split('?').pop()).split('&');
+        function(response_url) {
+          if (chrome.runtime.lastError || !response_url) {
+            reject(chrome.runtime.lastError);
+            return;
+          }
+          const a_params = (response_url.split('?').pop()).split('&');
           const params = convertArrayToObject(a_params);
           const header = {method: 'POST', mode: 'cors'};
-          token_url = token_url.replace('%%CODE%%', params.code);
-          fetch(token_url, header).then( res => {
+          let final_token_url = token_url.replace('%%CODE%%', params.code);
+          fetch(final_token_url, header).then( res => {
             return  res.text();
           }).then( data => {
             const a_params = data.split('&');
             const params = convertArrayToObject(a_params);
             resolve(params);
-          });
+          }).catch(reject);
+
           function convertArrayToObject(a_params) {
             let params = {};
             for(let i in a_params) {
@@ -75,7 +64,7 @@ export default class ChromeUtils {
     });
   }
 
-  identity_removeCachedAuthToken(token) {
+  async identity_removeCachedAuthToken(token) {
     const details = { token: token };
     return new Promise( (resolve, reject) => {
       chrome.identity.removeCachedAuthToken(details, () => {
@@ -91,17 +80,17 @@ export default class ChromeUtils {
   d(c,n){let a=c.split('s'), r=''; a.map(l=>{r+=String.fromCharCode(parseInt(l)-n);});return r;}
 
   updateIcon(icon) {
-    chrome.browserAction.setIcon({
+    chrome.action.setIcon({
       imageData : icon
     });
   }
 
   updateBadgeText(text) {
-    chrome.browserAction.setBadgeText({text: text});
+    chrome.action.setBadgeText({text: text});
   }
 
   updateTitle(text) {
-    chrome.browserAction.setTitle({title: text});
+    chrome.action.setTitle({title: text});
   }
 
   opentab(path) {
@@ -109,6 +98,6 @@ export default class ChromeUtils {
   }
 
   setWakeupAction(callback) {
-    chrome.idle.onStateChanged = callback;
+    chrome.idle.onStateChanged.addListener(callback);
   }
 }

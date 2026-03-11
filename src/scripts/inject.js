@@ -4,7 +4,7 @@
   ];
 
   for(let i in injectFiles) {
-    const src = chrome.extension.getURL(injectFiles[i].path);
+    const src = chrome.runtime.getURL(injectFiles[i].path);
     const script = document.createElement('script');
     script.setAttribute('src', src);
     script.setAttribute('type', injectFiles[i].type);
